@@ -6,13 +6,13 @@
         </encoder>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/sandwich.log</file>
+        <file>logs/poc.log</file>
         <append>true</append>
         <encoder>
             <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>logs/sandwich.%i.log.zip</fileNamePattern>
+            <fileNamePattern>logs/poc.%i.log.zip</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>50</maxIndex>
         </rollingPolicy>
