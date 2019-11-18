@@ -1,7 +1,6 @@
 package com.wawa.oms.controller;
 
 
-import com.wawa.oms.exception.BadRequestException;
 import com.wawa.oms.exception.NotFoundException;
 import com.wawa.oms.model.document.User;
 import com.wawa.oms.service.UserService;
@@ -9,7 +8,6 @@ import com.wawa.oms.util.CustomResponseCode;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
