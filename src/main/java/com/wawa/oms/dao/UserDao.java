@@ -21,4 +21,6 @@ public interface UserDao {
     String getUserSetting(String userId, String key);
 
     String addUserSetting(String userId, String key, String value);
+
+    void deleteUser(User user);
 }

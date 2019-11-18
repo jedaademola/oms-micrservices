@@ -27,6 +27,12 @@ public class UserDaoImpl implements UserDao {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         return mongoTemplate.findOne(query, User.class);
+
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        mongoTemplate.remove(user);
     }
 
     @Override
@@ -36,6 +42,7 @@ public class UserDaoImpl implements UserDao {
         user.set_id(user.get_id());
         return user;
     }
+
 
     @Override
     public Address addUserAddress(Address address) {

@@ -36,8 +36,8 @@ public class UserController {
         return ResponseEntity.ok().body(users);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") String userId) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
         User user = Optional.ofNullable( userService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
@@ -58,8 +58,17 @@ public class UserController {
         return userService.addNewUser(user);
     }
 
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable("userId") String userId) {
+        User user = Optional.ofNullable(userService.getUserById(userId))
+                .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
+                        "User not found for this id :: " + userId));
+        //else delete
+        userService.deleteUser(user);
+    }
+
     @GetMapping(path = "/settings/{userId}")
-    public Object getAllUserSettings(@PathVariable String userId) {
+    public Object getAllUserSettings(@PathVariable("userId") String userId) {
 
         Optional.ofNullable( userService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
@@ -69,7 +78,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/settings/{userId}/{key}")
-    public String getUserSetting(@PathVariable String userId, @PathVariable String key) {
+    public String getUserSetting(@PathVariable("userId") String userId,
+                                 @PathVariable("key") String key) {
         Optional.ofNullable( userService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
@@ -78,7 +88,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/settings/{userId}/{key}/{value}")
-    public String addUserSetting(@PathVariable String userId, @PathVariable String key, @PathVariable String value) {
+    public String addUserSetting(@PathVariable("userId") String userId,
+                                 @PathVariable("key") String key,
+                                 @PathVariable("value") String value) {
             User user =  Optional.ofNullable( userService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));

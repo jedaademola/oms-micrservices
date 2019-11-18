@@ -44,6 +44,14 @@ public class UserService {
         return null;
     }
 
+    public void deleteUser(User user) {
+        try {
+            userDao.deleteUser(user);
+        } catch (MicroServiceException ex) {
+            LOGGER.error(ex.getMessage());
+            LoggerUtil.logError(LOGGER, ex);
+        }
+    }
 
     public User addNewUser(User user) {
         try {
