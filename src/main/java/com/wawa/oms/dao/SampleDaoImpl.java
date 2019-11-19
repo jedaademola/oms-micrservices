@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements SampleDao {
+public class SampleDaoImpl implements SampleDao {
 
     @Autowired
     private MongoTemplate mongoTemplate;
