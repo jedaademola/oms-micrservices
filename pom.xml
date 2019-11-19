@@ -11,8 +11,8 @@
     <groupId>com.wawa</groupId>
     <artifactId>oms</artifactId>
     <version>500.0.0</version>
-    <name>oms</name>
-    <description>Wawa OMS Microservices using MongoDb</description>
+    <name>poc-framewrok</name>
+    <description>Wawa Microservices POC using MongoDb</description>
 
     <properties>
         <java.version>11</java.version>
@@ -87,19 +87,6 @@
         </dependency>
 
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>
