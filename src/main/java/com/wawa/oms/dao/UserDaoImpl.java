@@ -2,8 +2,10 @@ package com.wawa.oms.dao;
 
 
 import com.wawa.oms.model.document.Address;
-import com.wawa.oms.model.document.User;
+import com.wawa.oms.model.document.Sample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -12,34 +14,51 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements SampleDao {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Override
-    public List<User> getAllUsers() {
-        return mongoTemplate.findAll(User.class);
+    public List<Sample> getAllUsers() {
+        return mongoTemplate.findAll(Sample.class);
     }
 
     @Override
-    public User getUserById(String userId) {
+    public List<Sample> getAllUsersPaged(int pageNumber, int pageSize) {
+        final Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
+        Query query = new Query();
+        query.with(pageableRequest);
+        List<Sample> users = mongoTemplate.find(query, Sample.class);
+        return users;
+       /* BETWEEN
+       Query query = new Query();
+        query.addCriteria(Criteria.where("age").lt(50).gt(20));
+        List<User> users = mongoTemplate.find(query,User.class);*/
+
+       /* Sorting
+       Query query = new Query();
+        query.with(new Sort(Sort.Direction.ASC, "age"));
+        List<User> users = mongoTemplate.find(query,User.class);*/
+    }
+
+    @Override
+    public Sample getUserById(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
-        return mongoTemplate.findOne(query, User.class);
+        return mongoTemplate.findOne(query, Sample.class);
 
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(Sample user) {
         mongoTemplate.remove(user);
     }
 
     @Override
-    public User addNewUser(User user) {
+    public Sample addNewUser(Sample user) {
         mongoTemplate.save(user);
         // Now, user object will contain the ID as well
-        user.set_id(user.get_id());
         return user;
     }
 
@@ -55,7 +74,7 @@ public class UserDaoImpl implements UserDao {
     public Object getAllUserSettings(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
-        User user = mongoTemplate.findOne(query, User.class);
+        Sample user = mongoTemplate.findOne(query, Sample.class);
         return user != null ? user.getUserSettings() : "User not found.";
     }
 
@@ -64,7 +83,7 @@ public class UserDaoImpl implements UserDao {
         Query query = new Query();
         query.fields().include("userSettings");
         query.addCriteria(Criteria.where("userId").is(userId).andOperator(Criteria.where("userSettings." + key).exists(true)));
-        User user = mongoTemplate.findOne(query, User.class);
+        Sample user = mongoTemplate.findOne(query, Sample.class);
         return user != null ? user.getUserSettings().get(key) : "Not found.";
     }
 
@@ -72,7 +91,7 @@ public class UserDaoImpl implements UserDao {
     public String addUserSetting(String userId, String key, String value) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
-        User user = mongoTemplate.findOne(query, User.class);
+        Sample user = mongoTemplate.findOne(query, Sample.class);
         if (user != null) {
             user.getUserSettings().put(key, value);
             mongoTemplate.save(user);

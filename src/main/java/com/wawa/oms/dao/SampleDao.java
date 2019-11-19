@@ -2,17 +2,17 @@ package com.wawa.oms.dao;
 
 
 import com.wawa.oms.model.document.Address;
-import com.wawa.oms.model.document.User;
+import com.wawa.oms.model.document.Sample;
 
 import java.util.List;
 
-public interface UserDao {
+public interface SampleDao {
 
-    List<User> getAllUsers();
+    List<Sample> getAllUsers();
 
-    User getUserById(String userId);
+    Sample getUserById(String userId);
 
-    User addNewUser(User user);
+    Sample addNewUser(Sample user);
 
     Address addUserAddress(Address address);
 
@@ -22,5 +22,7 @@ public interface UserDao {
 
     String addUserSetting(String userId, String key, String value);
 
-    void deleteUser(User user);
+    void deleteUser(Sample user);
+
+    List<Sample> getAllUsersPaged(int pageNumber, int pageSize);
 }

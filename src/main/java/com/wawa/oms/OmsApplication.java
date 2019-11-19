@@ -10,4 +10,6 @@ public class OmsApplication {
         SpringApplication.run(OmsApplication.class, args);
     }
 
+    //LOG.debug("Temperature set to {}. Old temperature was {}.", newT, oldT);
+    //LOG.error("Failed to process {}", someUsefulContext, exception);
 }

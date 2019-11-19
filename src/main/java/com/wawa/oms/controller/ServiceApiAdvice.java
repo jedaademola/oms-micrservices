@@ -9,7 +9,7 @@ import com.wawa.oms.exception.ConflictException;
 import com.wawa.oms.exception.NotFoundException;
 import com.wawa.oms.model.common.ErrorDetails;
 import com.wawa.oms.model.common.Response;
-import com.wawa.oms.util.LoggerUtil;
+import com.wawa.oms.util.CustomResponseCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +27,14 @@ import java.util.List;
 @ControllerAdvice(annotations = RestController.class, basePackages = "com.wawa.oms.controller")
 @ResponseBody
 public class ServiceApiAdvice {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceApiAdvice.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceApiAdvice.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public Response handleValidationException(MethodArgumentNotValidException e) {
         Response response = new Response();
-        response.setCode("400");
-        response.setDescription("Input Validation failed");
+        response.setCode(CustomResponseCode.BAD_REQUEST);
+        response.setDescription(CustomResponseCode.VALIDATION_MESSAGE);
         BindingResult result = e.getBindingResult();
         List<FieldError> errorList = result.getFieldErrors();
         List<ErrorDetails> errors = new ArrayList<>();
@@ -44,8 +43,8 @@ public class ServiceApiAdvice {
         }
         response.setErrors(errors);
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
+
         return response;
     }
 
@@ -54,7 +53,7 @@ public class ServiceApiAdvice {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public Response handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         Response response = new Response();
-        response.setCode("400");
+        response.setCode(CustomResponseCode.BAD_REQUEST);
         response.setDescription(e.getLocalizedMessage());
 
         if (e.getCause() != null) {
@@ -82,8 +81,7 @@ public class ServiceApiAdvice {
             }
             response.setDescription("test:" + message);
         }
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -95,8 +93,7 @@ public class ServiceApiAdvice {
         response.setCode(e.getErrorCode());
         response.setDescription(e.getMessage());
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -108,8 +105,7 @@ public class ServiceApiAdvice {
         response.setCode(e.getErrorCode());
         response.setDescription(e.getMessage());
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -121,8 +117,7 @@ public class ServiceApiAdvice {
         response.setCode("10011");
         response.setDescription("Invalid Credentials");
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -131,12 +126,11 @@ public class ServiceApiAdvice {
     @ResponseBody
     public Response handleSecurityAccessDenied(AccessDeniedException e) {
         Response response = new Response();
-        response.setCode("403");
-        response.setDescription("Security: Access Denied");
-        LOGGER.error("Access violation: Access Denied Exception");
+        response.setCode(CustomResponseCode.FORBIDDEN);
+        response.setDescription(CustomResponseCode.getMessage(CustomResponseCode.FORBIDDEN));
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error("Access violation: Access Denied Exception");
+        LOG.error(e.toString());
         return response;
     }
 
@@ -145,11 +139,10 @@ public class ServiceApiAdvice {
     @ResponseBody
     public Response handleException(Exception e) {
         Response response = new Response();
-        response.setCode("001");
+        response.setCode(CustomResponseCode.INTERNAL_SERVER_ERROR);
         response.setDescription(e.getMessage());
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -162,8 +155,7 @@ public class ServiceApiAdvice {
         response.setCode(e.getErrorCode());
         response.setDescription(e.getMessage());
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -176,8 +168,7 @@ public class ServiceApiAdvice {
         response.setCode(e.getErrorCode());
         response.setDescription(e.getMessage());
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 
@@ -187,11 +178,10 @@ public class ServiceApiAdvice {
     @ResponseBody
     public Response handleInvalidFormatException(com.fasterxml.jackson.databind.exc.InvalidFormatException e) {
         Response response = new Response();
-        response.setCode("400");
+        response.setCode(CustomResponseCode.BAD_REQUEST);
         response.setDescription("Invalid input " + e.getValue());
 
-        LOGGER.error(e.toString());
-        LoggerUtil.logError(LOGGER, e);
+        LOG.error(e.toString());
         return response;
     }
 

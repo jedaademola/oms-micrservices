@@ -2,8 +2,8 @@ package com.wawa.oms.controller;
 
 
 import com.wawa.oms.exception.NotFoundException;
-import com.wawa.oms.model.document.User;
-import com.wawa.oms.service.UserService;
+import com.wawa.oms.model.document.Sample;
+import com.wawa.oms.service.SampleService;
 import com.wawa.oms.util.CustomResponseCode;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -17,86 +17,94 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/users")
-@Api("Endpoint for UserController")
-public class UserController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+@RequestMapping(value = "/api/v1/users")
+@Api("Endpoint for SampleController")
+public class SampleController {
+    private static final Logger LOG = LoggerFactory.getLogger(SampleController.class);
 
-    private UserService userService;
+    private SampleService sampleService;
 
-    public UserController( UserService userService) {
-        this.userService = userService;
+    public SampleController(SampleService sampleService) {
+        this.sampleService = sampleService;
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users =  userService.getAllUsers();
+    public ResponseEntity<List<Sample>> getUsers() {
+        List<Sample> users = sampleService.getAllUsers();
         if (CollectionUtils.isEmpty(users))
             throw  new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION, "No User(s) found" );
         return ResponseEntity.ok().body(users);
     }
 
+    @GetMapping(path = "/paging")
+    public ResponseEntity<List<Sample>> getAllUsersPaged(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        List<Sample> users = sampleService.getAllUsersPaged(pageNumber, pageSize);
+        if (CollectionUtils.isEmpty(users))
+            throw new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION, "No User(s) found");
+        return ResponseEntity.ok().body(users);
+    }
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
-        User user = Optional.ofNullable( userService.getUserById(userId))
+    public ResponseEntity<Sample> getUserById(@PathVariable("userId") String userId) {
+        Sample user = Optional.ofNullable(sampleService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
         return ResponseEntity.ok().body(user);
 
     }
     @PostMapping()
-    public User addUser(@Valid @RequestBody User user) {
-        return userService.addNewUser(user);
+    public Sample addUser(@Valid @RequestBody Sample user) {
+        return sampleService.addNewUser(user);
     }
 
     @PutMapping()
-    public User updateUser(@Valid @RequestBody User user) {
-         Optional.ofNullable( userService.getUserById(user.getUserId()))
+    public Sample updateUser(@Valid @RequestBody Sample user) {
+        Optional.ofNullable(sampleService.getUserById(user.getUserId()))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + user.getUserId()));
         //else update
-        return userService.addNewUser(user);
+        return sampleService.addNewUser(user);
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") String userId) {
-        User user = Optional.ofNullable(userService.getUserById(userId))
+        Sample user = Optional.ofNullable(sampleService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
         //else delete
-        userService.deleteUser(user);
+        sampleService.deleteUser(user);
     }
 
     @GetMapping(path = "/settings/{userId}")
     public Object getAllUserSettings(@PathVariable("userId") String userId) {
 
-        Optional.ofNullable( userService.getUserById(userId))
+        Optional.ofNullable(sampleService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
         //else fetch
-        return userService.getAllUserSettings(userId);
+        return sampleService.getAllUserSettings(userId);
     }
 
     @GetMapping(path = "/settings/{userId}/{key}")
     public String getUserSetting(@PathVariable("userId") String userId,
                                  @PathVariable("key") String key) {
-        Optional.ofNullable( userService.getUserById(userId))
+        Optional.ofNullable(sampleService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
         //else fetch
-        return userService.getUserSetting(userId, key);
+        return sampleService.getUserSetting(userId, key);
     }
 
     @GetMapping(path = "/settings/{userId}/{key}/{value}")
     public String addUserSetting(@PathVariable("userId") String userId,
                                  @PathVariable("key") String key,
                                  @PathVariable("value") String value) {
-            User user =  Optional.ofNullable( userService.getUserById(userId))
+        Sample user = Optional.ofNullable(sampleService.getUserById(userId))
                 .orElseThrow(() -> new NotFoundException(CustomResponseCode.NOT_FOUND_EXCEPTION,
                         "User not found for this id :: " + userId));
            //else Add key
             user.getUserSettings().put(key, value);
-            userService.addNewUser(user);
+        sampleService.addNewUser(user);
             return "Key added";
 
     }

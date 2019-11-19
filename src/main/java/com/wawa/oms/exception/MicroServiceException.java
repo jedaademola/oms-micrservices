@@ -1,7 +1,10 @@
 package com.wawa.oms.exception;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class MicroServiceException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
@@ -40,39 +43,6 @@ public class MicroServiceException extends RuntimeException {
     public MicroServiceException(String errorCode, String message, Exception e) {
         super(message, e);
         this.errorCode = errorCode;
-    }
-
-
-    /**
-     * Returns the errorCode
-     *
-     * @return errorCode String
-     */
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    /**
-     * Sets the errorCode
-     *
-     * @param errorCode
-     */
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    /**
-     * @return the errors
-     */
-    public List<Error> getErrors() {
-        return errors;
-    }
-
-    /**
-     * @param errors the errors to set
-     */
-    public void setErrors(List<Error> errors) {
-        this.errors = errors;
     }
 
 }
