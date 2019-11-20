@@ -36,3 +36,9 @@ JDK
 ----
 OpenJDK 11
 
+
+Logging Example
+--------------------
+LOG.debug("Temperature set to {}. Old temperature was {}.", newT, oldT);
+
+LOG.error("Failed to process {}", someUsefulContext, exception);
