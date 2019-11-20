@@ -36,8 +36,8 @@ public class CustomResponseCode {
         String message = "Undefined";
         try {
             message = httpCodes.get(code);
-        } catch (Exception ex) {
-            LOG.error("Error in getMessage():", ex);
+        } catch (Exception e) {
+            LOG.error("Error in getMessage {} :", "cannot get message from code", e);
         }
         return message;
     }
