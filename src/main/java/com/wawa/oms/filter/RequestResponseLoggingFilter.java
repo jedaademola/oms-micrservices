@@ -38,6 +38,6 @@ public class RequestResponseLoggingFilter implements Filter {
 
     @Override
     public void destroy() {
-        LOG.warn("Destructing filter :{}", this);
+        LOG.warn("Destructing Logging filter :{}", this);
     }
 }

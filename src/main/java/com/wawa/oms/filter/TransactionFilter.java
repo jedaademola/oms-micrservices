@@ -37,6 +37,6 @@ public class TransactionFilter implements Filter {
 
     @Override
     public void destroy() {
-        LOG.warn("Destructing filter :{}", this);
+        LOG.warn("Destructing Transaction filter :{}", this);
     }
 }

@@ -2,6 +2,8 @@
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!--uncomment to include caller date-->
+            <!--<includeCallerData>true</includeCallerData>-->
             <fieldNames>
                 <version>[ignore]</version>
                 <levelValue>[ignore]</levelValue>

@@ -15,7 +15,7 @@ Actuator
 
 Swagger UI
 
-Logstash
+Logstash encoders in JSON
 
 Docker
 
@@ -26,6 +26,8 @@ Junit
 RestTemplate
 
 MongoTemplate
+
+ModelMapper
 
 Database
 -----------
