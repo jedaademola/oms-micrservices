@@ -1,4 +1,4 @@
-Wawa Microservices POC using MongoDb
+Microservices POC using MongoDb
 ---------------------------------
 
 Technology
