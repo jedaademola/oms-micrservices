@@ -23,7 +23,7 @@ public class AsyncCommonService {
         long start = System.currentTimeMillis();
         Response response = new Response();
         try {
-            //TODO: process something
+            //TODO: process long running job
         } catch (Exception e) {
             String msg = "Exception in AsyncCommonService.logResult";
             LOG.error(msg, e);
